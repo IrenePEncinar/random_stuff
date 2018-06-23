@@ -1,22 +1,24 @@
 #!/usr/bin/env python3
 from tkinter import Tk, Label, Button
 from time import time
+from os import path
 
 class Chrono:
+
+    seconds_file = path.join(path.dirname(path.realpath(__file__)), "./seconds.txt")
 
     def __init__(self, master):
 
         self.time_format = "{hours:02}:{minutes:02}:{seconds:02}"
 
         self.start_time = 0
-        self.previous_time = 0
         self.elapsed_time = 0
         self.running = False
 
         self.master = master
         master.title("Chronometer")
 
-        self.time_label = Label(master, text=self.time_format.format(**self.convert_time_format(0)))
+        self.time_label = Label(master, text=self.time_format.format(**self.convert_time_format(self.previous_time)))
         self.time_label.config(font=("Sans", 40))
         self.time_label.pack()
 
@@ -27,6 +29,19 @@ class Chrono:
         self.restart_button = Button(master, text="Reset", command=self.reset)
         self.restart_button.config(font=("Sans", 10))
         self.restart_button.pack()
+
+    @property
+    def previous_time(self):
+        try:
+            with open(self.seconds_file) as f:
+                return float(f.read())
+        except:
+            return 0
+
+    @previous_time.setter
+    def previous_time(self, value):
+        with open(self.seconds_file, 'w') as f:
+            f.write(str(value))
 
     def start_stop(self):
         if self.running:
@@ -58,6 +73,7 @@ class Chrono:
         minutes = remainder / 60
         seconds = remainder % 60
         return {"hours": int(hours), "minutes": int(minutes), "seconds": int(seconds)}
+
 
 root = Tk()
 chrono = Chrono(root)
