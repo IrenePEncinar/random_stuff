@@ -14,6 +14,7 @@ class Chrono:
         self.start_time = 0
         self.elapsed_time = 0
         self.running = False
+        self.save_counter = 0
 
         self.master = master
         master.title("Chronometer")
@@ -65,6 +66,16 @@ class Chrono:
         if self.running:
             self.elapsed_time = time() - self.start_time + self.previous_time
             self.time_label.configure(text=self.time_format.format(**self.convert_time_format(self.elapsed_time)))
+
+            # Save to file each minute by setting the previous_time
+            if self.save_counter == 60:
+                self.save_counter = 0
+                self.previous_time = self.elapsed_time
+                self.start_time = time()
+                print("Save time!")
+            else:
+                self.save_counter +=1
+
             self.master.after(1000, self.refresh) # every second...
 
     def convert_time_format(self, total_seconds):
