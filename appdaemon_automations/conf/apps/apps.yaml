@@ -1,0 +1,4 @@
+sleep_well_app:
+  module: sleep_well_app
+  class: SleepWell
+
