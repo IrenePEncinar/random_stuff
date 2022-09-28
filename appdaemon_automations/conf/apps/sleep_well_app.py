@@ -1,17 +1,21 @@
 import hassapi as hass
 import datetime
 
-class SleepWell(hass.Hass):
+def its_summer():
+  return 6 <= datetime.datetime.now().month <= 9
 
+class SleepWell(hass.Hass):
   def initialize(self):
-    bed_time = datetime.time(21, 0, 0)
-    wake_up_time = datetime.time(8, 30, 0)
+    bed_time = self.parse_time(self.args["bed_time"])
+    wake_up_time = self.parse_time(self.args["wake_up_time"])
     self.run_daily(self.on_going_to_bed_cb, bed_time)
     self.run_daily(self.on_waking_up_cb, wake_up_time)
 
   def on_going_to_bed_cb(self, kwargs):
-    self.turn_on("scene.salon_de_ambiente")
+    if its_summer():
+      self.turn_on(self.args["switch"])
 
   def on_waking_up_cb(self, kwargs):
-    self.turn_off("switch.enchufe_3_on_off")
+    if its_summer():
+      self.turn_off(self.args["switch"])
 
