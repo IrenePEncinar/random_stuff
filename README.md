@@ -10,3 +10,6 @@ I just wanted a chronometer with a simple interface, so I tried searching Ubuntu
 Tired of wasting time with broken dependencies, I decided my time was best spent
 programming my own chrono. This is a working (quite ugly) first version that needs
 tons of improvement.
+
+
+:)
